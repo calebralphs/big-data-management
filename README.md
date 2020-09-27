@@ -5,16 +5,16 @@ Team members: Caleb Ralphs and Jackson Powell
 
 # Project 1
 ## Division of work
-Dataset creation - Caleb
-Data upload - Jackson
-3.1
-3.2
-3.3
-3.4
-4.1
-4.2
-4.3
-4.4
+* Dataset creation - Caleb
+* Data upload - Jackson
+* 3.1 - Jackson
+* 3.2 - Caleb
+* 3.3 - Caleb
+* 3.4 - Jackson
+* 4.1 - Caleb
+* 4.2 - Caleb
+* 4.3 - Jackson
+* 4.4 - Jackson
 
 ## Dataset creation
 The code for the dataset creation is labeled as DataCreator.java
