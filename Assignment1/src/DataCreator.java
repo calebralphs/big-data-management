@@ -24,7 +24,7 @@ public class DataCreator {
     }
 
     public static String generateRandomGender() {
-    	if ((int)generator.nextDouble()*2 < 1) { return "female"; }
+    	if (generator.nextDouble()*2 < 1) { return "female"; }
     	else { return "male"; }
     }
     
