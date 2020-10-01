@@ -5,10 +5,8 @@ import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.mapred.lib.MultipleInputs;
 import org.apache.hadoop.util.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 
 public class Query3 {
 	// key, customerName, numTrans, transTotal, transNumItems
@@ -21,7 +19,8 @@ public class Query3 {
             String[] splitLine = line.split(",");
             int customerID = Integer.parseInt(splitLine[0].trim());
             String customerName = splitLine[1];
-            outputValue.set("," + customerName + ",0,0,0");
+            String salary = splitLine[5];
+            outputValue.set("," + customerName + "," + salary + ",0,0,0");
             output.collect(new IntWritable(customerID), outputValue);
         }
     }
@@ -35,34 +34,38 @@ public class Query3 {
             int customerID = Integer.parseInt(splitLine[1].trim());
             String transTotal = splitLine[2];
             String transNumItems = splitLine[3];
-            outputValue.set(",,1," + transTotal + "," + transNumItems);
+            outputValue.set(",,,1," + transTotal + "," + transNumItems);
             output.collect((new IntWritable(customerID)), outputValue);
         }
     }
     public static class Reduce extends MapReduceBase implements Reducer<IntWritable, Text, IntWritable, Text> {
-    	private Text outputValue = new Text();
     	public void reduce(IntWritable key, Iterator<Text> values, OutputCollector<IntWritable, Text> output, Reporter reporter) throws IOException {
             float sum = 0;
             int count = 0;
             String name = "";
+            String salary = ""; 
             int minItems = 11;
             while (values.hasNext()) {
                 String[] input = values.next().toString().split(",");
-                sum += Float.parseFloat(input[3].trim());
-                count += Integer.parseInt(input[2].trim());
-                int numItems = Integer.parseInt(input[4].trim());
+                sum += Float.parseFloat(input[4].trim());
+                count += Integer.parseInt(input[3].trim());
+                int numItems = Integer.parseInt(input[5].trim());
                 if (numItems < minItems && numItems > 0) {
                 	minItems = numItems;
                 }
-                if(name.length() < 10){
+                if (input[1].length() >= 10){
                     name = input[1].trim();
                 }
+                if (input[2].length() >= 3) {
+                	salary = input[2].trim();
+                }
+ 
             }
             if (minItems == 11) {
             	minItems = 0;
             }
             Text outputValue = new Text();
-            outputValue.set("," + name + ", " + count + ", " + sum + ", " + minItems);
+            outputValue.set("," + name + ", " + salary + ", " + count + ", " + sum + ", " + minItems);
             output.collect(key,outputValue);
         }
     }
