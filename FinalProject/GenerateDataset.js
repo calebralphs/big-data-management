@@ -38,7 +38,7 @@ function generateLocations(maxNum=3) {
     for (i=0; i<maxNum; i++) {
         locations.push({
             type: "Point",
-            coordinates: [Math.random() * 360 - 180, Math.random() * 360 - 180]
+            coordinates: [Math.random() * 360 - 180, Math.random() * 180 - 90]
         });
     }
     return locations;
@@ -70,5 +70,5 @@ function generateEntries(names, numEntries, idLength = 10, nameLength = 5) {
 
 let names = generateNames();
 let entries = generateEntries(names, 100000);
-
+db.people.drop()
 db.people.insertMany(entries);
