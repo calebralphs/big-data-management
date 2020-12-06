@@ -1,14 +1,13 @@
 // Create all of the indexes that we want to test in this file.
 // Name of each index is listed as part of the comments above the create command.
 
-const databases = ["people1","people10","people50"];
-let database;
-// _id_
-for(let i = 0; i < 3; i++){
-    database = db.getCollection(databases[i]);
-    
+
+function generateIndexes(databaseName){
+    const database = db.getCollection(databaseName);
+
+    // _id_
     // Simple - numeric
-    // salary_1
+        // salary_1
     database.createIndex({salary : 1})
 
     // Compound
@@ -38,6 +37,8 @@ for(let i = 0; i < 3; i++){
     // favoriteLocals_1
     database.createIndex({favoriteLocals : 1})
 
+    print(database + " stats");
     // Print storage overhead of indexes
     printjson(database.stats())
+    
 }

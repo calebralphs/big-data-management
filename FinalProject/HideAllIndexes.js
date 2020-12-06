@@ -1,10 +1,8 @@
 // Hide all of the indexes that are generated in GenerateIndexes.js.
 // _id index cannot be hidden, but probably won't matter.
-const databases = ["people1","people10","people50"];
-let database;
-for(let i = 0; i < 3; i++){
-    database = db.getCollection(databases[i]);
 
+function hideAllIndexes(databaseName){
+    const database = db.getCollection(databaseName);
     // Simple - numeric
     // salary_1
     database.hideIndex({salary : 1})
