@@ -67,8 +67,14 @@ function generateEntries(names, numEntries, idLength = 10, nameLength = 5) {
     }
     return entries;
 }
+const sizes = [1000000, 10000000, 50000000];
+const databases = ["people1","people10","people50"];
+let names, entries, database;
+for(let i = 0; i < 3; i++){
+    names = generateNames();
+    entries = generateEntries(names, sizes[i]);
+    database = db.getCollection(databases[i]);
+    database.drop()
+    database.insertMany(entries);
+}
 
-let names = generateNames();
-let entries = generateEntries(names, 100000);
-db.people.drop()
-db.people.insertMany(entries);
