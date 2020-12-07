@@ -56,7 +56,6 @@ function generateEntries(names, numEntries, idLength = 10, nameLength = 5) {
         let friends = generateFriends(name, names);
         let favoriteLocals = generateLocations();
         entries.push({
-            _id: id,
             name: name,
             home: home,
             salary: salary,
@@ -67,10 +66,11 @@ function generateEntries(names, numEntries, idLength = 10, nameLength = 5) {
     }
     return entries;
 }
-const sizes = [1000000, 10000000, 50000000];
-const databases = ["people1","people10","people50"];
-let names, entries, database;
+var sizes = [1000000, 10000000, 50000000];
+var databases = ["people1","people10","people50"];
+var names, entries, database;
 for(let i = 0; i < 3; i++){
+    print("Generating " + databases[i]);
     names = generateNames();
     entries = generateEntries(names, sizes[i]);
     database = db.getCollection(databases[i]);
