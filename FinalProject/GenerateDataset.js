@@ -77,7 +77,7 @@ function generateAndInsertEntries(names, numEntries, databaseName, idLength = 10
 var sizes = [1000000, 10000000, 50000000];
 var databases = ["people1","people10","people50"];
 var names, entries, database;
-for(let i = 1; i < 3; i++){
+for(let i = 0; i < 3; i++){
     print("Generating " + databases[i]);
     names = generateNames();
     database = db.getCollection(databases[i]);

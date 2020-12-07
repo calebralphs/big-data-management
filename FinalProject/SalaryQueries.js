@@ -1,9 +1,6 @@
 load("HideAllIndexes.js");
-function salary1(databaseName){
-    const queryId = 1; // Change number to a number to use as a brief identifier
-    const queryTitle = "Simple range w/o sort"; // Fill in to describe what index this query is testing
-    const queryDescription = "Simple range query over the salary field."; // Fill in to describe in more detail about the
-    
+
+function queryRunner(databaseName, queryId, queryTitle, queryDescription, queryFunc, indexName){
     print("Query " + queryId + ": " + queryTitle);
     print(queryDescription);
 
@@ -11,19 +8,26 @@ function salary1(databaseName){
 
     // W/o index
     print("Without index:");
-    database.find({salary : {$gt : 50000}});
-
+    queryFunc();
     printjson(database.explain());
 
     // With index
     print("With salary index");
-    database.unhideIndex({salary : 1});
+    database.unhideIndex(indexName);
 
-    database.find({salary : {$gt : 50000}});
-
+    queryFunc();
     printjson(database.explain());
+    hideAllIndexes(databaseName);  
+}
 
-    hideAllIndexes(databaseName);
+function salary1(databaseName){
+    const queryId = 1; // Change number to a number to use as a brief identifier
+    const queryTitle = "Simple range w/o sort"; // Fill in to describe what index this query is testing
+    const queryDescription = "Simple range query over the salary field."; // Fill in to describe in more detail about the
+    const database = db.getCollection(databaseName);
+    const queryFunc = () => database.find({salary : {$gt : 50000}});
+    const indexName = "salary_1";
+    queryRunner(databaseName,queryId, queryTitle, queryDescription, queryFunc, indexName);
 }
 
 function salary2(databaseName){
