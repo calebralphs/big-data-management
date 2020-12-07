@@ -44,9 +44,10 @@ function generateLocations(maxNum=3) {
     return locations;
 }
 
-function generateEntries(names, numEntries, idLength = 10, nameLength = 5) {
+function generateAndInsertEntries(names, numEntries, databaseName, idLength = 10, nameLength = 5) {
     let entries = [];
     var i;
+    var database = db.getCollection(databaseName);
     for (i=0; i<numEntries; i++) {
         let id = Math.random().toString().substr(2, idLength+2);
         let name = Math.random().toString(36).substr(2, nameLength+2);
@@ -63,18 +64,24 @@ function generateEntries(names, numEntries, idLength = 10, nameLength = 5) {
             friends: friends,
             favoriteLocals: favoriteLocals
         });
+        if (i % 99999 === 0){ // If limit reached for insertMany, then bulk insert, clear entries, and print status
+            print(i + ": Adding " + entries.length + " entries to " + databaseName + "- " + (100 * (i/numEntries)) + "% done");
+            database.insertMany(entries);
+            entries = [];
+        }
     }
-    return entries;
+    print(i + ": Adding " + entries.length + " entries to " + databaseName);
+    database.insertMany(entries);
+    entries = [];
 }
 var sizes = [1000000, 10000000, 50000000];
 var databases = ["people1","people10","people50"];
 var names, entries, database;
-for(let i = 0; i < 3; i++){
+for(let i = 1; i < 3; i++){
     print("Generating " + databases[i]);
     names = generateNames();
-    entries = generateEntries(names, sizes[i]);
     database = db.getCollection(databases[i]);
     database.drop()
-    database.insertMany(entries);
+    generateAndInsertEntries(names, sizes[i], databases[i]);
 }
 
