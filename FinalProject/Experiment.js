@@ -4,7 +4,7 @@
 // Put the actual queries in a separate file reduce redundancy. Not sure if collection name can be parameterized.
 load("HideAllIndexes.js");
 load("Queries.js");
-const databases = ["people1","people10","people50"];
+var databases = ["people1","people10","people50"];
 for(let i = 0; i < 3; i++){
     print()
     print("-----------------------Experiment for database " + databases[i] + "-----------------------");
