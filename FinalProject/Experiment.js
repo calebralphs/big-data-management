@@ -5,7 +5,7 @@
 load("HideAllIndexes.js");
 load("Queries.js");
 var databases = ["people1","people10","people50"];
-for(let i = 0; i < 3; i++){
+for(let i = 0; i < 1; i++){
     print()
     print("-----------------------Experiment for database " + databases[i] + "-----------------------");
     hideAllIndexes(databases[i]);

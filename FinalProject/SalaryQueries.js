@@ -1,4 +1,19 @@
 load("HideAllIndexes.js");
+function printStats(stats){
+    const execStats = stats.executionStats;
+    const hasIndex = execStats.executionStages.hasOwnProperty("inputStage") && execStats.executionStages.inputStage.hasOwnProperty("indexName");
+    const indexStr = hasIndex ? execStats.executionStages.inputStage.indexName : "No index used";
+
+
+    const resultObj = {
+     timeMilli : execStats.executionTimeMillis,
+     keysExamined : execStats.totalKeysExamined,
+     docsExamined : execStats.totalDocsExamined,
+     index : indexStr,
+     nReturned : execStats.nReturned
+    }
+    printjson(resultObj);
+}
 
 function queryRunner(databaseName, queryId, queryTitle, queryDescription, queryFunc, indexName){
     print("Query " + queryId + ": " + queryTitle);
@@ -8,16 +23,16 @@ function queryRunner(databaseName, queryId, queryTitle, queryDescription, queryF
 
     // W/o index
     print("Without index:");
-    queryFunc();
-    printjson(database.explain());
+    printStats(queryFunc());
+    // printjson(database.explain());
 
     // With index
     print("With salary index");
     database.unhideIndex(indexName);
 
-    queryFunc();
-    printjson(database.explain());
+    printStats(queryFunc());
     hideAllIndexes(databaseName);  
+    print();
 }
 
 function salary1(databaseName){
@@ -25,7 +40,7 @@ function salary1(databaseName){
     const queryTitle = "Simple range w/o sort"; // Fill in to describe what index this query is testing
     const queryDescription = "Simple range query over the salary field."; // Fill in to describe in more detail about the
     const database = db.getCollection(databaseName);
-    const queryFunc = () => database.find({salary : {$gt : 50000}});
+    const queryFunc = () => database.find({salary : {$gt : 50000}}).explain("executionStats");
     const indexName = "salary_1";
     queryRunner(databaseName,queryId, queryTitle, queryDescription, queryFunc, indexName);
 }
@@ -180,9 +195,9 @@ function salary6(databaseName){
 
 function runAllSalaryQueries(databaseName){
     salary1(databaseName);
-    salary2(databaseName);
-    salary3(databaseName);
-    salary4(databaseName);
-    salary5(databaseName);
-    salary6(databaseName);
+    // salary2(databaseName);
+    // salary3(databaseName);
+    // salary4(databaseName);
+    // salary5(databaseName);
+    // salary6(databaseName);
 }
