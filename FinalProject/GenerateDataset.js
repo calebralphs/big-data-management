@@ -74,10 +74,10 @@ function generateAndInsertEntries(names, numEntries, databaseName, idLength = 10
     database.insertMany(entries);
     entries = [];
 }
-var sizes = [1000000, 10000000, 50000000];
-var databases = ["people1","people10","people50"];
+var sizes = [1000000, 10000000, 250000];
+var databases = ["people1","people10","people250k"];
 var names, entries, database;
-for(let i = 0; i < 3; i++){
+for(let i = 2; i < 3; i++){
     print("Generating " + databases[i]);
     names = generateNames();
     database = db.getCollection(databases[i]);

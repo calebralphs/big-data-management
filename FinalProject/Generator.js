@@ -7,9 +7,9 @@ if (shouldGenerateCollections){
 }
 load("GenerateIndexes.js");
 load("HideAllIndexes.js");
-var databases = ["people1","people10","people50"];
+var databases = ["people1","people10","people250k"];
 
-for(let i = 0; i < 3; i++){
+for(let i = 2; i < 3; i++){
     generateIndexes(databases[i]);
     hideAllIndexes(databases[i]);
 }
