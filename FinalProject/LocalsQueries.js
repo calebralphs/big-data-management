@@ -43,7 +43,7 @@ function local2(databaseName){
                 "coordinates.0" : {$lt : longitudeMax},
                 "coordinates.1" : {$gt : latitudeMin},
                 "coordinates.1" : {$lt : latitudeMax}}
-            }}).hint(indexName).explain("executionStats");
+            }}).explain("executionStats");
     }; 
     const indexName = "favoriteLocals_1";
     queryRunner(databaseName,queryId, queryTitle, queryDescription, queryFunc, indexName);

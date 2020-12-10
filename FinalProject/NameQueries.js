@@ -45,7 +45,10 @@ function name4(databaseName){
     const queryFunc = () => database.aggregate(
         [
             {$group : {_id : "$name", count : {$sum : 1}, max : {$max : "$salary"}, min: {$min : "$salary"}}}
-        ]
+        ],
+        {
+            allowDiskUse: true
+        }
     ).next();
     const indexName = "name_hashed";
     queryRunner(databaseName,queryId, queryTitle, queryDescription, queryFunc, indexName, false);

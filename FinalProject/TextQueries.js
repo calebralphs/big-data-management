@@ -40,7 +40,7 @@ function text3(databaseName){
     const queryFunc = () => database.aggregate([
         { $match: { $text: { $search:  names, $language : "none"} } },
         { $group: { _id: null, count: { $sum: 1 } } }
-      ]).next();
+      ]).hasNext();
     const indexName = "$**_text";
     queryRunner(databaseName,queryId, queryTitle, queryDescription, queryFunc, indexName, false);
 }
