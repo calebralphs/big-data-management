@@ -3,11 +3,12 @@
  */
 load("HideAllIndexes.js");
 /**
- * Print the relevant stats from the larger stats object returned by cursor.explain()
+ * Return the relevant stats from the larger stats object returned by cursor.explain()
  * 
  * @param {*} stats An object describing the execution stats for a query, given by cursor.explain("executionStats")
+ * @returns The relevant stats from the larger stats object returned by cursor.explain() 
  */
-function printStats(stats){
+function getStats(stats){
     const execStats = stats.executionStats;
     const hasIndex = execStats.executionStages.hasOwnProperty("inputStage") && execStats.executionStages.inputStage.hasOwnProperty("indexName");
     const indexStr = hasIndex ? execStats.executionStages.inputStage.indexName : "No index used";
@@ -22,7 +23,7 @@ function printStats(stats){
      index : indexStr,
      nReturned : execStats.nReturned
     }
-    printjson(resultObj);
+    return resultObj;
 }
 
 /**
@@ -41,46 +42,115 @@ function queryRunner(databaseName, queryId, queryTitle, queryDescription, queryF
     print(queryDescription);
     hideAllIndexes(databaseName); 
     var database = db.getCollection(databaseName);
-    var cursor, start, end, numResults
-    // W/o index
-    print("Without index:");
+    var withIndexStats = [];
+    var withoutIndexStats = [];
     
     try{
-        if (withStats){
-            printStats(queryFunc());
+        // Order of runs
+        // w/o index
+        // w/index
+        // w/index
+        // w/o index
+        // w/o index
+        // w/index
+        withoutIndexStats.push(runQueryFunc(queryFunc, withStats));
+
+        database.unhideIndex(indexName);
+
+        withIndexStats.push(runQueryFunc(queryFunc, withStats));
+        withIndexStats.push(runQueryFunc(queryFunc, withStats));
+
+        database.hideIndex(indexName);
+
+        withoutIndexStats.push(runQueryFunc(queryFunc, withStats));
+        withoutIndexStats.push(runQueryFunc(queryFunc, withStats));
+
+        database.unhideIndex(indexName);
+
+        withIndexStats.push(runQueryFunc(queryFunc, withStats));
+
+    }catch (error){
+        print(error);
+    }
+    // In case the first query errors out, try to get stats for a run with an index.   
+    if(withIndexStats.length === 0){
+        try{
+            database.unhideIndex(indexName);
+
+            withIndexStats.push(runQueryFunc(queryFunc, withStats));
+        }catch(error){
+            print(error);
+        }
+    }
+    // Separate the try-catch blocks in case there is an error when using or not using an index.    
+    try{
+        print("With index");
+        var medianStat = getMedianStats(withIndexStats);
+        if (medianStat === -1){
+            print("Error retrieving stats for query with index.");
         }
         else{
-            start = Date.now();
-            cursor = queryFunc();
-            end = Date.now();
-            print("Execution time: " + (end-start) + " ms");
-            print("Result: ")
-            printjson(cursor);
+            printjson(medianStat);
+        }
+
+        print();
+
+        print("Without index");
+        var medianStat = getMedianStats(withoutIndexStats);
+        if (medianStat === -1){
+            print("Error retrieving stats for query without index.");
+        }
+        else{
+            printjson(medianStat);
         }
     }
     catch(error){
-        print(error)
+        print(error);
     }
-    // printjson(database.explain());
-    print();
-    // With index
-    print("With index");
-    database.unhideIndex(indexName);
-    try {
-        if (withStats){
-            printStats(queryFunc());
-        }
-        else{
-            start = Date.now();
-            cursor = queryFunc();
-            end = Date.now();
-            print("Execution time: " + (end-start) + " ms");
-            print("Result: ")
-            printjson(cursor);
-        }
-    } catch (error) {
-        print(error)
-    }
+
+    
     hideAllIndexes(databaseName);  
     print();
+}
+
+/**
+ * Run the queryFunc function and return the stats either provided by explain() or manually by Date.now().
+ * 
+ * @param {*} queryFunc The query function to run and get the stats including the execution time of for the field timeMilli. 
+ * @param {*} withStats True if the query returns the result of calling cursor.explain("executionStats"), false otherwise to indicate manual timing is needed.
+ * @returns The object holding the stats object which should include the field timeMilli for the execution time in milliseconds at a minimum.
+ */
+function runQueryFunc(queryFunc, withStats){
+    var cursor, start, end;
+
+    if (withStats){
+        return getStats(queryFunc());
+    }
+    else{
+        start = Date.now();
+        cursor = queryFunc();
+        end = Date.now();
+        return {timeMilli : end-start, result : cursor};
+    }
+
+}
+/**
+ * Return a stats object where the field timeMilli is set to the medium timeMilli value of the given stats objects.
+ * @param {*} stats An array of objects that all must include a timeMilli field representing the execution time for a run.
+ * @returns The first stats object with the median time. Fields other than the time should be the same across runs of the same query and so can be used from any stats object.
+ */
+function getMedianStats(stats){
+    var vals = [];
+    for(var stat of stats){
+        vals.push(stat.timeMilli);
+    }
+    if (vals.length === 0){return -1;}
+    vals = vals.sort((a,b)=> a-b);
+    if (vals.length % 2 === 1){
+        stats[0].timeMilli = vals[Math.floor(vals.length/2)];
+    }
+    else{
+        stats[0].timeMilli = (vals[Math.floor((vals.length - 1)/2)] + vals[Math.floor(vals.length/2)]) / 2;
+    }
+    return stats[0];
 }

@@ -1,0 +1,2092 @@
+MongoDB shell version v4.4.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("cf1e8c60-7632-4364-9f0a-1473d3d808e4") }
+MongoDB server version: 4.4.2
+---
+The server generated these startup warnings when booting: 
+        2020-12-09T03:25:01.112-05:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> load("Experiment.js")load("Experiment.js")
+
+-----------------------Experiment for database people1-----------------------
+Query S1: Simple range w/o sort
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1076,
+	"keysExamined" : 499469,
+	"docsExamined" : 499469,
+	"index" : "salary_1",
+	"nReturned" : 499469
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 389,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 499469
+}
+
+Query S2: Simple range with 1 sort
+Simple range query over the salary field with sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1116,
+	"keysExamined" : 499469,
+	"docsExamined" : 499469,
+	"index" : "salary_1",
+	"nReturned" : 499469
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1930,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 499469
+}
+
+Query S3: Simple range with -1 sort
+Simple range query over the salary field with opposite sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1103,
+	"keysExamined" : 499469,
+	"docsExamined" : 499469,
+	"index" : "salary_1",
+	"nReturned" : 499469
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1836,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 499469
+}
+
+Query 4: Simple range with projection on salary field only
+Simple range query over the salary field with projection of only the indexes field
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 353,
+	"keysExamined" : 499469,
+	"docsExamined" : 0,
+	"index" : "salary_1",
+	"nReturned" : 499469
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 574,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 499469
+}
+
+Query S5: Simple equality query on salary field
+Simple equality query over the salary field using the salary from the first doc
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 8,
+	"docsExamined" : 8,
+	"index" : "salary_1",
+	"nReturned" : 8
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 401,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 8
+}
+
+Query S6: Simple inequality query on salary field
+Simple inequality query over the salary field using the salary from the first doc
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 2282,
+	"keysExamined" : 999993,
+	"docsExamined" : 999992,
+	"index" : "salary_1",
+	"nReturned" : 999992
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 404,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 999992
+}
+
+Query SB1: Simple equality on salary prefix
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 8,
+	"docsExamined" : 8,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 8
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 385,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 8
+}
+
+Query SB2: Simple equality on birthday suffix
+There should be no difference from the index because query does not include prefix.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 407,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 47622
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 411,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 47622
+}
+
+Query SB3: Salary and birthday equality
+There should be a difference from the index because query involves all fields.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 8,
+	"docsExamined" : 8,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 426,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query SB4: Salary range w/o sort
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 245,
+	"keysExamined" : 100326,
+	"docsExamined" : 100326,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 100326
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 382,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 100326
+}
+
+Query SB5: Salary range w/ 1 sort
+Simple range query over the salary field with sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 239,
+	"keysExamined" : 100326,
+	"docsExamined" : 100326,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 100326
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 526,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 100326
+}
+
+Query F1: Find name in friends
+Find the people who have the first document's name as a friend.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "friends_-1",
+	"nReturned" : 0
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 554,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 0
+}
+
+Query F2: Find people with no friends
+Find the people have no friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 417,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 199916
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 416,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 199916
+}
+
+Query F3: Find people with 4 friends
+Find the people have 4 friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 449,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 200568
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 418,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 200568
+}
+
+Query F4: Find people with the same friends as the first doc
+Find the people that have the same friends in the same order as the first doc.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 53,
+	"keysExamined" : 20091,
+	"docsExamined" : 20089,
+	"index" : "friends_-1",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 627,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query F5: Find excluded friends
+Find the people who have the first document's name as a friend and a friend of one of their friends since there are no enforced constraints between friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 171,
+	"keysExamined" : 79522,
+	"docsExamined" : 77113,
+	"index" : "friends_-1",
+	"nReturned" : 77113
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 628,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 77113
+}
+
+Query H1: Home in WPI bounds
+Use the GeoWithin operator to check if the home coordinate is roughly around WPI (box around 41,-72).
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 51,
+	"docsExamined" : 29,
+	"index" : "home_2dsphere",
+	"nReturned" : 14
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1376,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 14
+}
+
+Query H2: Home within 100000 meters of East Hall
+Use the near operator to check if the home coordinate is within 100000 meters of East Hall.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people1Tree: GEONEAR  field=home maxdist=100000 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1,
+	"keysExamined" : 119,
+	"docsExamined" : 64,
+	"index" : "No index used",
+	"nReturned" : 47
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query H3: GeoNear East Hall
+Use the GeoNear operator to see what home coordinate are near East Hall.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people1Tree: GEONEAR  field=home maxdist=1.79769e+308 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 10006,
+	"keysExamined" : 1010688,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 1000000
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query L1: Check if any locals are near WPI
+Get people who have favorite locales within 1 latitude and longitude of WPI
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1423,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 534424
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1319,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 534424
+}
+
+Query L2: Check if any locals are near a home
+Get people who have favorite locales within 1 latitude and longitude of the first document's home
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people1Tree: favoriteLocals $elemMatch (obj)\n    $and\n        coordinates.0 $lt -150.8497419222668\n        coordinates.1 $lt -83.54380744217846\nSort: {}\nProj: {}\n planner returned error :: caused by :: hint provided does not correspond to an existing index",
+	"code" : 2,
+	"codeName" : "BadValue"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 7410,
+	"keysExamined" : 3000000,
+	"docsExamined" : 1000000,
+	"index" : "favoriteLocals_1",
+	"nReturned" : 8752
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query L3: Check if any locals are in the northern or western hemispheres
+Get people who have favorite locales within the western or northern hemispheres
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 2237,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 765844
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 2419,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 765844
+}
+
+Query N1: Simple equality search on hashed field
+Simple equality search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "name_hashed",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 386,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query N2: Simple range search on hashed field
+Simple range search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 388,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 249244
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 392,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 249244
+}
+
+Query N3: Simple inequality search on hashed field
+Simple inequality search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 400,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 999999
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 400,
+	"keysExamined" : 0,
+	"docsExamined" : 1000000,
+	"index" : "No index used",
+	"nReturned" : 999999
+}
+
+Query N4: Name salary aggregation
+Aggregate the number of records, sum, max, and min of salary on name
+Error: command failed: {
+	"ok" : 0,
+	"errmsg" : "Exceeded memory limit for $group, but didn't allow external sort. Pass allowDiskUse:true to opt in.",
+	"code" : 292,
+	"codeName" : "QueryExceededMemoryLimitNoDiskUseAllowed"
+} : aggregate failed
+Error: command failed: {
+	"ok" : 0,
+	"errmsg" : "Exceeded memory limit for $group, but didn't allow external sort. Pass allowDiskUse:true to opt in.",
+	"code" : 292,
+	"codeName" : "QueryExceededMemoryLimitNoDiskUseAllowed"
+} : aggregate failed
+With index
+Error retrieving stats for query with index.
+
+Without index
+Error retrieving stats for query without index.
+
+Query N5: Find friend network
+Find the people who have the first document's name as a friend and a friend of one of their friends since there are no enforced constraints between friends.
+With index
+{
+	"timeMilli" : 2135,
+	"result" : [
+		"r1gvacy",
+		"my5iipd",
+		"l16ulkg",
+		"w6ehb3o",
+		"y584xyv"
+	]
+}
+
+Without index
+{
+	"timeMilli" : 1972,
+	"result" : [
+		"r1gvacy",
+		"my5iipd",
+		"l16ulkg",
+		"w6ehb3o",
+		"y584xyv"
+	]
+}
+
+Query T1: Search for first name
+Search on the name in the first document
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people1Tree: TEXT : query=r1gvacy, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: {}\nProj: {}\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "No index used",
+	"nReturned" : 0
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "No index used",
+	"nReturned" : 0
+}
+
+Query T2: Search for first name with sorting
+Search on the name in the first document with sorting by meta text score.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people1Tree: TEXT : query=r1gvacy, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: { score: { $meta: \"textScore\" } }\nProj: {}\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "$**_text",
+	"nReturned" : 0
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query T3: Text search in aggregation
+Aggregation on the friends in the first document with aggregation.
+Error: command failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people1Tree: TEXT : query=y584xyv w6ehb3o l16ulkg my5iipd, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: {}\nProj: {}\nCollation: { locale: \"simple\" }\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+} : aggregate failed
+With index
+{ "timeMilli" : 247, "result" : { "_id" : null, "count" : 77113 } }
+
+Without index
+{ "timeMilli" : 206, "result" : { "_id" : null, "count" : 77113 } }
+
+Query I1: Sort by id
+Sort 1 by _id
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1014,
+	"keysExamined" : 1000000,
+	"docsExamined" : 1000000,
+	"index" : "_id_",
+	"nReturned" : 1000000
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 914,
+	"keysExamined" : 1000000,
+	"docsExamined" : 1000000,
+	"index" : "_id_",
+	"nReturned" : 1000000
+}
+
+Query I2: Sort by id
+Sort 1 by _id
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1076,
+	"keysExamined" : 1000000,
+	"docsExamined" : 1000000,
+	"index" : "_id_",
+	"nReturned" : 1000000
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1261,
+	"keysExamined" : 1000000,
+	"docsExamined" : 1000000,
+	"index" : "_id_",
+	"nReturned" : 1000000
+}
+
+
+-----------------------Experiment for database people10-----------------------
+Query S1: Simple range w/o sort
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 13468,
+	"keysExamined" : 5000270,
+	"docsExamined" : 5000270,
+	"index" : "salary_1",
+	"nReturned" : 5000270
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4163,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 5000270
+}
+
+Query S2: Simple range with 1 sort
+Simple range query over the salary field with sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 13464,
+	"keysExamined" : 5000270,
+	"docsExamined" : 5000270,
+	"index" : "salary_1",
+	"nReturned" : 5000270
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 22674,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 5000270
+}
+
+Query S3: Simple range with -1 sort
+Simple range query over the salary field with opposite sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 13838,
+	"keysExamined" : 5000270,
+	"docsExamined" : 5000270,
+	"index" : "salary_1",
+	"nReturned" : 5000270
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 19010,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 5000270
+}
+
+Query 4: Simple range with projection on salary field only
+Simple range query over the salary field with projection of only the indexes field
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 3467,
+	"keysExamined" : 5000270,
+	"docsExamined" : 0,
+	"index" : "salary_1",
+	"nReturned" : 5000270
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 5335,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 5000270
+}
+
+Query S5: Simple equality query on salary field
+Simple equality query over the salary field using the salary from the first doc
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 105,
+	"docsExamined" : 105,
+	"index" : "salary_1",
+	"nReturned" : 105
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4087,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 105
+}
+
+Query S6: Simple inequality query on salary field
+Simple inequality query over the salary field using the salary from the first doc
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 27774,
+	"keysExamined" : 9999896,
+	"docsExamined" : 9999895,
+	"index" : "salary_1",
+	"nReturned" : 9999895
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4000,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 9999895
+}
+
+Query SB1: Simple equality on salary prefix
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 105,
+	"docsExamined" : 105,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 105
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4052,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 105
+}
+
+Query SB2: Simple equality on birthday suffix
+There should be no difference from the index because query does not include prefix.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4113,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 476404
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4174,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 476404
+}
+
+Query SB3: Salary and birthday equality
+There should be a difference from the index because query involves all fields.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 105,
+	"docsExamined" : 105,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 7
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4245,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 7
+}
+
+Query SB4: Salary range w/o sort
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 3001,
+	"keysExamined" : 999757,
+	"docsExamined" : 999757,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 999757
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 3883,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 999757
+}
+
+Query SB5: Salary range w/ 1 sort
+Simple range query over the salary field with sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 2943,
+	"keysExamined" : 999757,
+	"docsExamined" : 999757,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 999757
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 6542,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 999757
+}
+
+Query F1: Find name in friends
+Find the people who have the first document's name as a friend.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "friends_-1",
+	"nReturned" : 0
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 5759,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 0
+}
+
+Query F2: Find people with no friends
+Find the people have no friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4225,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 2001306
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4150,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 2001306
+}
+
+Query F3: Find people with 4 friends
+Find the people have 4 friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4246,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 1999825
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4394,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 1999825
+}
+
+Query F4: Find people with the same friends as the first doc
+Find the people that have the same friends in the same order as the first doc.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4035,
+	"keysExamined" : 2001307,
+	"docsExamined" : 2001306,
+	"index" : "friends_-1",
+	"nReturned" : 2001306
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 5629,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 2001306
+}
+
+Query F5: Find excluded friends
+Find the people who have the first document's name as a friend and a friend of one of their friends since there are no enforced constraints between friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "friends_-1",
+	"nReturned" : 0
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 5491,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 0
+}
+
+Query H1: Home in WPI bounds
+Use the GeoWithin operator to check if the home coordinate is roughly around WPI (box around 41,-72).
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1,
+	"keysExamined" : 299,
+	"docsExamined" : 275,
+	"index" : "home_2dsphere",
+	"nReturned" : 145
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 14039,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 145
+}
+
+Query H2: Home within 100000 meters of East Hall
+Use the near operator to check if the home coordinate is within 100000 meters of East Hall.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people10Tree: GEONEAR  field=home maxdist=100000 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 8,
+	"keysExamined" : 820,
+	"docsExamined" : 741,
+	"index" : "No index used",
+	"nReturned" : 564
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query H3: GeoNear East Hall
+Use the GeoNear operator to see what home coordinate are near East Hall.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people10Tree: GEONEAR  field=home maxdist=1.79769e+308 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 355385,
+	"keysExamined" : 10025814,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 10000000
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query L1: Check if any locals are near WPI
+Get people who have favorite locales within 1 latitude and longitude of WPI
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 12999,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 5337088
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 12723,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 5337088
+}
+
+Query L2: Check if any locals are near a home
+Get people who have favorite locales within 1 latitude and longitude of the first document's home
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people10Tree: favoriteLocals $elemMatch (obj)\n    $and\n        coordinates.0 $lt -63.83309133500047\n        coordinates.1 $lt 76.64019594098266\nSort: {}\nProj: {}\n planner returned error :: caused by :: hint provided does not correspond to an existing index",
+	"code" : 2,
+	"codeName" : "BadValue"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 146811,
+	"keysExamined" : 30000000,
+	"docsExamined" : 10000000,
+	"index" : "favoriteLocals_1",
+	"nReturned" : 6550888
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query L3: Check if any locals are in the northern or western hemispheres
+Get people who have favorite locales within the western or northern hemispheres
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 24828,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 7656629
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 24053,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 7656629
+}
+
+Query N1: Simple equality search on hashed field
+Simple equality search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "name_hashed",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4064,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query N2: Simple range search on hashed field
+Simple range search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4265,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 1415796
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4058,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 1415796
+}
+
+Query N3: Simple inequality search on hashed field
+Simple inequality search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4826,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 9999999
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 4402,
+	"keysExamined" : 0,
+	"docsExamined" : 10000000,
+	"index" : "No index used",
+	"nReturned" : 9999999
+}
+
+Query N4: Name salary aggregation
+Aggregate the number of records, sum, max, and min of salary on name
+Error: command failed: {
+	"ok" : 0,
+	"errmsg" : "Exceeded memory limit for $group, but didn't allow external sort. Pass allowDiskUse:true to opt in.",
+	"code" : 292,
+	"codeName" : "QueryExceededMemoryLimitNoDiskUseAllowed"
+} : aggregate failed
+Error: command failed: {
+	"ok" : 0,
+	"errmsg" : "Exceeded memory limit for $group, but didn't allow external sort. Pass allowDiskUse:true to opt in.",
+	"code" : 292,
+	"codeName" : "QueryExceededMemoryLimitNoDiskUseAllowed"
+} : aggregate failed
+With index
+Error retrieving stats for query with index.
+
+Without index
+Error retrieving stats for query without index.
+
+Query N5: Find friend network
+Find the people who have the first document's name as a friend and a friend of one of their friends since there are no enforced constraints between friends.
+With index
+{ "timeMilli" : 4172, "result" : [ "uwfqdaz" ] }
+
+Without index
+{ "timeMilli" : 4162, "result" : [ "uwfqdaz" ] }
+
+Query T1: Search for first name
+Search on the name in the first document
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people10Tree: TEXT : query=uwfqdaz, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: {}\nProj: {}\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 159,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query T2: Search for first name with sorting
+Search on the name in the first document with sorting by meta text score.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people10Tree: TEXT : query=uwfqdaz, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: { score: { $meta: \"textScore\" } }\nProj: {}\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "$**_text",
+	"nReturned" : 1
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query T3: Text search in aggregation
+Aggregation on the friends in the first document with aggregation.
+Error: error hasNext: false
+Error: error hasNext: false
+With index
+Error retrieving stats for query with index.
+
+Without index
+Error retrieving stats for query without index.
+
+Query I1: Sort by id
+Sort 1 by _id
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 9730,
+	"keysExamined" : 10000000,
+	"docsExamined" : 10000000,
+	"index" : "_id_",
+	"nReturned" : 10000000
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 9876,
+	"keysExamined" : 10000000,
+	"docsExamined" : 10000000,
+	"index" : "_id_",
+	"nReturned" : 10000000
+}
+
+Query I2: Sort by id
+Sort 1 by _id
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 11158,
+	"keysExamined" : 10000000,
+	"docsExamined" : 10000000,
+	"index" : "_id_",
+	"nReturned" : 10000000
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 10724,
+	"keysExamined" : 10000000,
+	"docsExamined" : 10000000,
+	"index" : "_id_",
+	"nReturned" : 10000000
+}
+
+
+-----------------------Experiment for database people250k-----------------------
+Query S1: Simple range w/o sort
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 207,
+	"keysExamined" : 125186,
+	"docsExamined" : 125186,
+	"index" : "salary_1",
+	"nReturned" : 125186
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 100,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 125186
+}
+
+Query S2: Simple range with 1 sort
+Simple range query over the salary field with sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 205,
+	"keysExamined" : 125186,
+	"docsExamined" : 125186,
+	"index" : "salary_1",
+	"nReturned" : 125186
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 252,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 125186
+}
+
+Query S3: Simple range with -1 sort
+Simple range query over the salary field with opposite sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 212,
+	"keysExamined" : 125186,
+	"docsExamined" : 125186,
+	"index" : "salary_1",
+	"nReturned" : 125186
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 249,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 125186
+}
+
+Query 4: Simple range with projection on salary field only
+Simple range query over the salary field with projection of only the indexes field
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 80,
+	"keysExamined" : 125186,
+	"docsExamined" : 0,
+	"index" : "salary_1",
+	"nReturned" : 125186
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 127,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 125186
+}
+
+Query S5: Simple equality query on salary field
+Simple equality query over the salary field using the salary from the first doc
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 8,
+	"docsExamined" : 8,
+	"index" : "salary_1",
+	"nReturned" : 8
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 100,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 8
+}
+
+Query S6: Simple inequality query on salary field
+Simple inequality query over the salary field using the salary from the first doc
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 474,
+	"keysExamined" : 249993,
+	"docsExamined" : 249992,
+	"index" : "salary_1",
+	"nReturned" : 249992
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 98,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 249992
+}
+
+Query SB1: Simple equality on salary prefix
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 8,
+	"docsExamined" : 8,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 8
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 94,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 8
+}
+
+Query SB2: Simple equality on birthday suffix
+There should be no difference from the index because query does not include prefix.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 100,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 11906
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 99,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 11906
+}
+
+Query SB3: Salary and birthday equality
+There should be a difference from the index because query involves all fields.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 8,
+	"docsExamined" : 8,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 106,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query SB4: Salary range w/o sort
+Simple range query over the salary field.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 68,
+	"keysExamined" : 25250,
+	"docsExamined" : 25250,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 25250
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 95,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 25250
+}
+
+Query SB5: Salary range w/ 1 sort
+Simple range query over the salary field with sorting
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 68,
+	"keysExamined" : 25250,
+	"docsExamined" : 25250,
+	"index" : "salary_1_birthday_-1",
+	"nReturned" : 25250
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 127,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 25250
+}
+
+Query F1: Find name in friends
+Find the people who have the first document's name as a friend.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 0,
+	"docsExamined" : 0,
+	"index" : "friends_-1",
+	"nReturned" : 0
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 137,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 0
+}
+
+Query F2: Find people with no friends
+Find the people have no friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 102,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 49864
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 101,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 49864
+}
+
+Query F3: Find people with 4 friends
+Find the people have 4 friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 102,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 49917
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 105,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 49917
+}
+
+Query F4: Find people with the same friends as the first doc
+Find the people that have the same friends in the same order as the first doc.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 14,
+	"keysExamined" : 4875,
+	"docsExamined" : 4873,
+	"index" : "friends_-1",
+	"nReturned" : 7
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 142,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 7
+}
+
+Query F5: Find excluded friends
+Find the people who have the first document's name as a friend and a friend of one of their friends since there are no enforced constraints between friends.
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 22,
+	"keysExamined" : 9783,
+	"docsExamined" : 9688,
+	"index" : "friends_-1",
+	"nReturned" : 9688
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 151,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 9688
+}
+
+Query H1: Home in WPI bounds
+Use the GeoWithin operator to check if the home coordinate is roughly around WPI (box around 41,-72).
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 19,
+	"docsExamined" : 8,
+	"index" : "home_2dsphere",
+	"nReturned" : 5
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 324,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 5
+}
+
+Query H2: Home within 100000 meters of East Hall
+Use the near operator to check if the home coordinate is within 100000 meters of East Hall.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people250kTree: GEONEAR  field=home maxdist=100000 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 42,
+	"docsExamined" : 20,
+	"index" : "No index used",
+	"nReturned" : 13
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query H3: GeoNear East Hall
+Use the GeoNear operator to see what home coordinate are near East Hall.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people250kTree: GEONEAR  field=home maxdist=1.79769e+308 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 2172,
+	"keysExamined" : 255311,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 250000
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query L1: Check if any locals are near WPI
+Get people who have favorite locales within 1 latitude and longitude of WPI
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 358,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 133349
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 359,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 133349
+}
+
+Query L2: Check if any locals are near a home
+Get people who have favorite locales within 1 latitude and longitude of the first document's home
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people250kTree: favoriteLocals $elemMatch (obj)\n    $and\n        coordinates.0 $lt 35.28915859553103\n        coordinates.1 $lt 82.4763253048086\nSort: {}\nProj: {}\n planner returned error :: caused by :: hint provided does not correspond to an existing index",
+	"code" : 2,
+	"codeName" : "BadValue"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 1548,
+	"keysExamined" : 750000,
+	"docsExamined" : 250000,
+	"index" : "favoriteLocals_1",
+	"nReturned" : 230708
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query L3: Check if any locals are in the northern or western hemispheres
+Get people who have favorite locales within the western or northern hemispheres
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 556,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 191838
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 561,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 191838
+}
+
+Query N1: Simple equality search on hashed field
+Simple equality search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "name_hashed",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 99,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query N2: Simple range search on hashed field
+Simple range search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 96,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 16175
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 94,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 16175
+}
+
+Query N3: Simple inequality search on hashed field
+Simple inequality search on name using the name of the first collection
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 97,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 249999
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 98,
+	"keysExamined" : 0,
+	"docsExamined" : 250000,
+	"index" : "No index used",
+	"nReturned" : 249999
+}
+
+Query N4: Name salary aggregation
+Aggregate the number of records, sum, max, and min of salary on name
+With index
+{
+	"timeMilli" : 415,
+	"result" : {
+		"_id" : "p84aojw",
+		"count" : 1,
+		"max" : 2867,
+		"min" : 2867
+	}
+}
+
+Without index
+{
+	"timeMilli" : 415,
+	"result" : {
+		"_id" : "d154okj",
+		"count" : 1,
+		"max" : 43474,
+		"min" : 43474
+	}
+}
+
+Query N5: Find friend network
+Find the people who have the first document's name as a friend and a friend of one of their friends since there are no enforced constraints between friends.
+With index
+{ "timeMilli" : 289, "result" : [ "xnwc15j", "rspokid", "bhr8xkh" ] }
+
+Without index
+{ "timeMilli" : 284, "result" : [ "xnwc15j", "rspokid", "bhr8xkh" ] }
+
+Query T1: Search for first name
+Search on the name in the first document
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people250kTree: TEXT : query=xnwc15j, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: {}\nProj: {}\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 13,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "No index used",
+	"nReturned" : 1
+}
+
+Query T2: Search for first name with sorting
+Search on the name in the first document with sorting by meta text score.
+Error: explain failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people250kTree: TEXT : query=xnwc15j, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: { score: { $meta: \"textScore\" } }\nProj: {}\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+}
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 0,
+	"keysExamined" : 1,
+	"docsExamined" : 1,
+	"index" : "$**_text",
+	"nReturned" : 1
+}
+
+Without index
+Error retrieving stats for query without index.
+
+Query T3: Text search in aggregation
+Aggregation on the friends in the first document with aggregation.
+Error: command failed: {
+	"ok" : 0,
+	"errmsg" : "error processing query: ns=test.people250kTree: TEXT : query=bhr8xkh rspokid, language=none, caseSensitive=0, diacriticSensitive=0, tag=NULL\nSort: {}\nProj: {}\nCollation: { locale: \"simple\" }\n planner returned error :: caused by :: need exactly one text index for $text query",
+	"code" : 291,
+	"codeName" : "NoQueryExecutionPlans"
+} : aggregate failed
+With index
+{ "timeMilli" : 27, "result" : { "_id" : null, "count" : 9688 } }
+
+Without index
+{ "timeMilli" : 90, "result" : { "_id" : null, "count" : 9688 } }
+
+Query I1: Sort by id
+Sort 1 by _id
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 220,
+	"keysExamined" : 250000,
+	"docsExamined" : 250000,
+	"index" : "_id_",
+	"nReturned" : 250000
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 217,
+	"keysExamined" : 250000,
+	"docsExamined" : 250000,
+	"index" : "_id_",
+	"nReturned" : 250000
+}
+
+Query I2: Sort by id
+Sort 1 by _id
+With index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 255,
+	"keysExamined" : 250000,
+	"docsExamined" : 250000,
+	"index" : "_id_",
+	"nReturned" : 250000
+}
+
+Without index
+{
+	"executionSuccess" : true,
+	"timeMilli" : 269,
+	"keysExamined" : 250000,
+	"docsExamined" : 250000,
+	"index" : "_id_",
+	"nReturned" : 250000
+}
+
+true
+> 

@@ -43,12 +43,16 @@ function home2(databaseName){
 function home3(databaseName){
     const queryId = "H3"; // Change number to a number to use as a brief identifier
     const queryTitle = "GeoNear East Hall"; // Fill in to describe what index this query is testing
-    const queryDescription = "Use the GeoNear operator to check if the home coordinate is near East Hall."; // Fill in to describe in more detail about the
+    const queryDescription = "Use the GeoNear operator to see what home coordinate are near East Hall."; // Fill in to describe in more detail about the
     const database = db.getCollection(databaseName);
-    const queryFunc = () => db.runCommand( { geoNear : databaseName ,
-            near : { type : "Point" ,
-            coordinates: [ -71.805353, 42.273922 ] } ,
-            spherical : true } ).explain("executionStats");
+    const queryFunc = () => database.find({
+        home : {$nearSphere: {
+           $geometry: {
+              type : "Point",
+              coordinates : [ -71.805353, 42.273922 ]
+           }
+        }}
+      }).explain("executionStats");
     const indexName = "home_2dsphere";
     queryRunner(databaseName,queryId, queryTitle, queryDescription, queryFunc, indexName);
 }
@@ -61,5 +65,5 @@ function home3(databaseName){
 function runAllHomeQueries(databaseName){
     home1(databaseName);
     home2(databaseName);
-    // home3(databaseName);
+    home3(databaseName);
 }
