@@ -21,3 +21,5 @@ When the experiment starts a collection, an indicator of this is printed to the 
 Within each collection experiment, the output describes the result of each query experiment on the collection.
 For each query the output includes the query id (referenced in the report), a brief description of what is tested, and the performance of the query when the index is available and when it is not available.
 An example of most of the output included in the report can be seen in output.txt.
+
+Due to these entry points being in the Mongo shell and not an interface that we created, screenshots of these commands were not included in the report.
